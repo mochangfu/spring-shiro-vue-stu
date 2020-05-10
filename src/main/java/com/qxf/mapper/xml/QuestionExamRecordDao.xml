@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxf.mapper.QuestionExamRecordDao">
+
+    <resultMap type="com.qxf.pojo.QuestionExamRecord" id="QuestionExamRecordMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="examId" column="exam_id" jdbcType="VARCHAR"/>
+        <result property="joinId" column="join_id" jdbcType="VARCHAR"/>
+        <result property="joinDate" column="join_date" jdbcType="OTHER"/>
+        <result property="joinTimeCost" column="join_time_cost" jdbcType="INTEGER"/>
+        <result property="joinScore" column="join_score" jdbcType="INTEGER"/>
+        <result property="joinResultLevel" column="join_result_level" jdbcType="INTEGER"/>
+        <result property="joinAnswerFill" column="join_answer_fill" jdbcType="VARCHAR"/>
+        <result property="joinAnswerJudge" column="join_answer_judge" jdbcType="VARCHAR"/>
+        <result property="joinAnswerSingle" column="join_answer_single" jdbcType="VARCHAR"/>
+        <result property="joinAnswerMultiple" column="join_answer_multiple" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--新增所有列-->
+    <insert id="add" parameterType="com.qxf.pojo.QuestionExamRecord">
+        insert into boot_shiro_vue_stu.question_exam_record(id,exam_id, join_id, join_date, join_time_cost, join_score, join_result_level, join_answer_fill, join_answer_judge, join_answer_single,join_answer_multiple)
+        values (#{id}, #{examId}, #{joinId}, #{joinDate}, #{joinTimeCost}, #{joinScore}, #{joinResultLevel}, #{joinAnswerFill}, #{joinAnswerJudge}, #{joinAnswerSingle}, #{joinAnswerMultiple})
+    </insert>
+
+</mapper>

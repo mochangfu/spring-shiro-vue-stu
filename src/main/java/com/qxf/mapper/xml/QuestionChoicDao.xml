@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxf.mapper.QuestionChoicDao">
+
+    <resultMap type="com.qxf.pojo.QuestionChoic" id="QuestionChoicMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="createId" column="create_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="OTHER"/>
+        <result property="updateId" column="update_id" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="OTHER"/>
+        <result property="questionContent" column="question_content" jdbcType="VARCHAR"/>
+        <result property="choiceA" column="choice_A" jdbcType="VARCHAR"/>
+        <result property="choiceB" column="choice_B" jdbcType="VARCHAR"/>
+        <result property="choiceC" column="choice_C" jdbcType="VARCHAR"/>
+        <result property="choiceD" column="choice_D" jdbcType="VARCHAR"/>
+        <result property="questionAnswer" column="question_answer" jdbcType="VARCHAR"/>
+        <result property="questionExplain" column="question_explain" jdbcType="VARCHAR"/>
+        <result property="questionScore" column="question_score" jdbcType="VARCHAR"/>
+        <result property="questionLevel" column="question_level" jdbcType="VARCHAR"/>
+        <result property="questionSubject" column="question_subject" jdbcType="VARCHAR"/>
+        <result property="questionType" column="question_type" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询列表-->
+    <select id="getQuestionChoicList" parameterType="string" resultMap="QuestionChoicMap">
+        SELECT t.* from question_choic t,question_paper p
+        where t.id=p.question_id
+        and t.question_type=#{questionType}
+        <if test="paperId!=null and paperId!=''">
+            and p.paper_id=#{paperId}
+        </if>
+    </select>
+
+</mapper>

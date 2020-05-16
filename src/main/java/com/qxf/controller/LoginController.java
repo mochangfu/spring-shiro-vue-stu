@@ -26,7 +26,7 @@ public class LoginController extends BaseController{
     private LoginLogService loginLogService;
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public Object login(String name,String pass, HttpSession session, HttpServletRequest request) {
+    public Object login(String name, String pass, HttpSession session, HttpServletRequest request) {
         User user = new User();
         user.setUsername(name);
         user.setPassword(pass);

@@ -7,7 +7,6 @@ import com.qxf.service.UserService;
 import com.qxf.utils.EnumCode;
 import com.qxf.utils.ExcelUtil;
 import com.qxf.utils.ResultUtil;
-import org.apache.ibatis.annotations.Param;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -15,7 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.jws.soap.SOAPBinding;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -42,11 +41,54 @@ public class UserController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/uploadHander", method = RequestMethod.POST)
-    public String uploadLogo(HttpServletRequest request) {
+    public String uploadLogo(HttpServletRequest request)throws Exception {
         uploadImg = new HashMap<String, String>();
         uploadImg = UploadUtil.uploadImage(request, "vue_shiro_photo/userImg");
         return uploadImg.get("pic");
     }
+    /**
+     * 下载用户头像
+     */
+    @ResponseBody
+    @GetMapping(value = "/getFtpFile/{filename}")
+    public void getFile(@PathVariable("filename") String filename,HttpServletResponse response) {
+        new HashMap<String, String>();
+         UploadUtil.getFileFromftp("vue_shiro_photo/userImg"+filename,response);
+    }
+
+
+    @GetMapping(value = "/vue_shiro_photo/userImg/{filename}")
+    public String readImg(@PathVariable("filename") String filename,HttpServletRequest request,HttpServletResponse response) throws IOException {
+
+        ServletOutputStream out = null;
+        FileInputStream ips = null;
+        String url = "G:\\ftpserver\\vue_shiro_photo\\userImg\\"+filename;
+        try {
+//获取图片存放路径 
+            File file = new File(url);
+            if(!file.exists()) {
+                return null;
+            }
+
+            ips = new FileInputStream(file);
+            response.setContentType("multipart/form-data");
+            out = response.getOutputStream();
+//读取文件流  
+            int len = 0;
+            byte[] buffer = new byte[1024 * 10];
+            while ((len = ips.read(buffer)) != -1){
+                out.write(buffer,0,len);
+            }
+            out.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            out.close();
+            ips.close();
+        }
+        return null;
+    }
+
 
     @RequestMapping("/upload")
     @ResponseBody

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qxf.exception.MyException;
 import com.qxf.mapper.StudentMapper;
-import com.qxf.pojo.Major;
 import com.qxf.pojo.Student;
 import com.qxf.pojo.User;
 import com.qxf.pojo.UserRole;

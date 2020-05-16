@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
@@ -21,9 +22,9 @@ public class FTPFileTransmit {
 
     public FTPFileTransmit() {
 
-        this.ftpName = "Administrator";
-        this.ftpPassword = "qiuxinfa";
-        this.ftpServerIP = "192.168.43.152";
+        this.ftpName = "2541453938@qq.com";
+        this.ftpPassword = "a1234509876";
+        this.ftpServerIP = "192.168.239.1";//fpt的地址
         this.ftpPort = 21;
 
     }
@@ -94,13 +95,13 @@ public class FTPFileTransmit {
     }
 
     /**
-     * Method name: getFromFTP <BR>
+     * Method name: downloadFileFromFtp <BR>
      * Description: 从FTP上读取文件 <BR>
      * filePath=/20161118_ReTransmit/111.jpg <BR>
      * outPutFilePath = C:/ftpload.jpg
      * @return boolean<BR>
      */
-    public boolean getFromFTP(String filePath, String outPutFilePath) {
+    public boolean downloadFileFromFtp(String filePath, String outPutFilePath) {
         boolean flag = false;
         // 创建FTP客户端
         FTPClient ftpClient = new FTPClient();
@@ -142,9 +143,53 @@ public class FTPFileTransmit {
                 e.printStackTrace();
             }
         }
-
         return flag;
     }
+    public boolean getFileFromFtp(String filePath, HttpServletResponse response) {
+        boolean flag = false;
+        // 创建FTP客户端
+        FTPClient ftpClient = new FTPClient();
+        // 输出流用于输出文件
+        FileOutputStream fos = null;
+        try {
+            // 建立FTP连接
+            ftpClient.connect(ftpServerIP, ftpPort);
+            // 如果登录成功后, 才进行创建输出流
+            if (ftpClient.login(ftpName, ftpPassword)) {
+                // FTP文件
+                String distinationFile = filePath;
+                // 实例化输出流
+                //fos = new FileOutputStream(outPutFilePath);
+                // 设置缓冲
+                ftpClient.setBufferSize(1024);
+                // 设置文件类型(二进制类型)
+                if (ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE)) {
+                    ftpClient.retrieveFile(distinationFile, response.getOutputStream());
+                    flag = true;
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+            flag = false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            flag = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            flag = false;
+        } finally {
+            try {
+                // 关闭输出流
+                IOUtils.closeQuietly(fos);
+                // 关闭连接
+                ftpClient.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return flag;
+    }
+
     /**
      * 自动创建ftp根目录下的的文件夹目录
      */
@@ -323,6 +368,9 @@ public class FTPFileTransmit {
         }
         return buffer;
     }
+
+
+
     public static void main(String[] args) {
         FTPFileTransmit ftpFileTransmit = new FTPFileTransmit();
         //=================================创建文件夹===========================================//
@@ -350,7 +398,7 @@ public class FTPFileTransmit {
         //=================================下载文件===========================================//
         String fromfilepath = "ftp.txt";
         String outPutFilePath = "C:\\Users\\sa\\Desktop\\ftp.txt";
-        flag = ftpFileTransmit.getFromFTP(fromfilepath, outPutFilePath);
+        flag = ftpFileTransmit.downloadFileFromFtp(fromfilepath, outPutFilePath);
         if (flag) {
             System.out.println("****** FTP下载成功******");
         } else {

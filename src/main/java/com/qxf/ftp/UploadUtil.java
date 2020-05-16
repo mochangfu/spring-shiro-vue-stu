@@ -1,6 +1,5 @@
 package com.qxf.ftp;
 
-import com.xiaoleilu.hutool.date.DateUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
@@ -8,12 +7,12 @@ import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
-import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 
@@ -85,13 +84,37 @@ public final class UploadUtil {
         return fileItems;
     }
 
+    public void downloadFile( String fileName,String outPutFilePath){
+        //=================================下载文件===========================================//
+        FTPFileTransmit ftpFileTransmit = new FTPFileTransmit();
+        boolean flag  = ftpFileTransmit.downloadFileFromFtp(fileName, outPutFilePath);
+        if (flag) {
+            System.out.println("****** FTP下载成功******");
+        } else {
+            System.out.println("****** FTP下载失败******");
+        }
+    }
+
+    public static void getFileFromftp(String fileName, HttpServletResponse response){
+        //=================================下载文件===========================================//
+        FTPFileTransmit ftpFileTransmit = new FTPFileTransmit();
+        boolean flag  = ftpFileTransmit.getFileFromFtp(fileName, response);
+        if (flag) {
+            System.out.println("****** FTP下载成功******");
+        } else {
+            System.out.println("****** FTP下载失败******");
+        }
+    }
+
+
+
     /**
      * 上传文件处理(支持批量)
      *
      * @param request
      * @param namespace
      */
-    public static Map<String, String> uploadImage(HttpServletRequest request, String namespace) {
+    public static Map<String, String> uploadImage(HttpServletRequest request, String namespace)throws  Exception {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
         Map<String, String> fileNames = new HashMap<String, String>();
         if (multipartResolver.isMultipart(request)) {
@@ -103,6 +126,7 @@ public final class UploadUtil {
                 if (multipartFile != null) {
                     String name = multipartFile.getOriginalFilename();
                     if (!"".equals(name)) {
+                        if(name.indexOf(".jpg") == -1)throw new Exception("抱歉，目前仅支持jpg图片") ;
                         if (name.indexOf(".") == -1 && "blob".equals(name)) {
                             name = name + ".png";
                         }
@@ -111,11 +135,12 @@ public final class UploadUtil {
                         String fileName = uuid + postFix;
                         try {
 
-                            String filePath = remove2Sftp(multipartFile.getBytes(), namespace, fileName);
+                            //String filePath = remove2Sftp(multipartFile.getBytes(), namespace, fileName);
+                            String filePath = remove2Local(multipartFile, namespace, fileName);
                             if (filePath != null && !"".equals(filePath)) {
                                 fileNames.put(key, filePath);
                             }
-                        } catch (IOException e1) {
+                        } catch (Exception e1) {
                             e1.printStackTrace();
                         }
                     }
@@ -124,6 +149,7 @@ public final class UploadUtil {
         }
         return fileNames;
     }
+/*
 
     public static String[] uploadImage1(HttpServletRequest request, String namespace) {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
@@ -162,6 +188,7 @@ public final class UploadUtil {
         }
         return fileNames;
     }
+*/
 
     /**
      * 上传本地图片到ftp服务器
@@ -169,22 +196,22 @@ public final class UploadUtil {
      * @param filePath
      * @param namespace
      */
-    public static String uploadImage(String filePath, String namespace) {
+   /* public static String uploadImage(String filePath, String namespace) {
         String path = "";
         if ((filePath != null && !"".equals(filePath)) && (namespace != null && !"".equals(namespace))) {
             path = remove2Sftp(filePath, namespace);
         }
         return path;
-    }
+    }*/
 
     /**
      * 获取上传文件临时目录
      *
      * @param request
      */
-    public static String getUploadDir(HttpServletRequest request) {
+    /*public static String getUploadDir(HttpServletRequest request) {
         return request.getServletPath() + uploadFileDir + File.separator;
-    }
+    }*/
 
     /**
      * 移动文件到SFTP,并生产随机的名称
@@ -249,6 +276,74 @@ public final class UploadUtil {
         }
     }
 
+    public static String remove2Local(byte[] byteFile, String namespace, String fileName) {
+        if (byteFile == null) {
+            throw new RuntimeException("文件" + fileName + "不存在");
+        }
+
+        String dir = "";
+        String dirpath = (dir + "/" + namespace).replace("//", "/");
+        String path = "G:\\ftpserver\\"+namespace;
+        String filePath = "G:\\ftpserver\\"+namespace+"\\"+fileName;
+        OutputStream os = null;
+        try {
+            byte[] bs = new byte[1024];
+            // 读取到的数据长度
+            int len;
+            // 输出的文件流保存到本地文件
+            File tempFile = new File(path);
+            if (!tempFile.exists()) {
+                tempFile.mkdirs();
+            }
+            os = new FileOutputStream(tempFile.getPath() + File.separator + fileName);
+            // 开始读取
+                os.write(bs);
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // 完毕，关闭所有链接
+            try {
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (path.contains("home")) {
+            return (namespace + "/" + fileName).replace("//", "/").replace("\\", "/");
+        } else {
+            return (dirpath + "/" + fileName).replace("//", "/").replace("\\", "/");
+        }
+    }
+    public static String remove2Local( MultipartFile multipartFile, String namespace, String fileName) {
+        if (multipartFile == null) {
+            throw new RuntimeException("文件" + fileName + "不存在");
+        }
+        String path = "G:\\ftpserver\\"+namespace;
+        String filePath = "G:\\ftpserver\\"+namespace+"\\"+fileName;
+        String dir = "";
+        String dirpath = (dir + "/" + namespace).replace("//", "/");
+        try {
+            // 输出的文件流保存到本地文件
+            File tempFile = new File(path);
+            if (!tempFile.exists()) {
+                tempFile.mkdirs();
+            }
+            File file = new File(filePath);
+            multipartFile.transferTo(file);;
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // 完毕，关闭所有链接
+        }
+        if (path.contains("home")) {
+            return (namespace + "/" + fileName).replace("//", "/").replace("\\", "/");
+        } else {
+            return (dirpath + "/" + fileName).replace("//", "/").replace("\\", "/");
+        }
+    }
+
 //    /**
 //     * 微信移动文件到SFTP
 //     * @author Salad
@@ -308,7 +403,7 @@ public final class UploadUtil {
      * @param namespace
      * @param isFtp
      */
-    public static Map<String, String> uploadImageDir(HttpServletRequest request, String namespace, boolean isFtp) {
+  /*  public static Map<String, String> uploadImageDir(HttpServletRequest request, String namespace, boolean isFtp) {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
         Map<String, String> fileNames = new HashMap<String, String>();
         if (multipartResolver.isMultipart(request)) {
@@ -322,7 +417,7 @@ public final class UploadUtil {
             }
             while (iterator.hasNext()) {
                 String key = iterator.next();
-                MultipartFile multipartFile = multiRequest.getFile(key);
+                MultipartFile multipartFile = multiRequest.getFileFromftp(key);
                 if (multipartFile != null) {
                     String name = multipartFile.getOriginalFilename();
                     if (!"".equals(name)) {
@@ -348,7 +443,7 @@ public final class UploadUtil {
             }
         }
         return fileNames;
-    }
+    }*/
 
     /**
      * 上传文件到本地服务器处理(支持批量)
@@ -356,9 +451,9 @@ public final class UploadUtil {
      * @param request
      * @param namespace
      */
-    public static Map<String, String> uploadImageDir(HttpServletRequest request, String namespace) {
+ /*   public static Map<String, String> uploadImageDir(HttpServletRequest request, String namespace) {
         return uploadImageDir(request, namespace, false);
-    }
+    }*/
 
 //    /**
 //     * 获取上传图片的路径

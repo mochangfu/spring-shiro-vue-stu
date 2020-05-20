@@ -63,12 +63,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
         // 根据用户类型查询  一级菜单
         List<Perms> parentList = rolePermissionService.findRolesPermisByFatherId(null, user.getRoleId());
+        for (Perms p : parentList) {
+            if(p.getSort()==null)p.setSort(1);
+        }
+        parentList.sort(Comparator.comparing(Perms::getSort));
         List<Perms> sonList = null;
         List<Perms> sonssonList = null;
         for (int i = 0, j = parentList.size(); i < j; i++) {
 
             // 二级 页面
             sonList = rolePermissionService.findRolesPermisByFatherId(parentList.get(i).getId(), user.getRoleId());
+            for (Perms p : sonList) {
+                if(p.getSort()==null)p.setSort(1);
+            }
+            sonList.sort(Comparator.comparing(Perms::getSort));
             for (int k = 0, l = sonList.size(); k < l; k++) {
 
                 // 三级 按钮

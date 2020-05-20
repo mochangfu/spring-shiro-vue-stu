@@ -13,7 +13,7 @@ import java.util.List;
  * @Description: com.qxf.mapper
  */
 public interface TeacherMapper extends BaseMapper<Teacher>{
-    List<Teacher> getListByPage(Page<Teacher> page,@Param("name") String name);
+    List<Teacher> getListByPage(Page<Teacher> page, @Param("name") String name);
 
     List<Teacher> findAllTeacher();
 }

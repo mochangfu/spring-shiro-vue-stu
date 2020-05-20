@@ -35,4 +35,5 @@ public class User implements Serializable{
     private List<Perms> userPerms; //用户拥有的权限
     @TableField(exist = false)
     private String[] ids;          //批量删除用户的id
+
 }

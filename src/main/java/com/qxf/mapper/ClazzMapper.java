@@ -13,7 +13,7 @@ import java.util.List;
  * @Description: com.qxf.mapper
  */
 public interface ClazzMapper extends BaseMapper<Clazz>{
-    List<Clazz> getListByPage(Page<Clazz> page,@Param("name") String name);
+    List<Clazz> getListByPage(Page<Clazz> page, @Param("name") String name);
 
     List<Clazz> getAllClazz(@Param("majorId") String majorId);
 }

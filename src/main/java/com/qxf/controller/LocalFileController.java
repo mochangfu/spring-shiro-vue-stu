@@ -3,13 +3,11 @@ package com.qxf.controller;
 import com.qxf.ftp.UploadUtil;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Auther: qiuxinfa
@@ -17,51 +15,36 @@ import java.util.HashMap;
  * @Description: com.qxf.controller
  */
 @RestController
-@RequestMapping(value = "/vue_shiro_photo/userImg")
+@RequestMapping
 public class LocalFileController extends BaseController {
 
-    /**
-     * 下载用户头像
-     */
+    Map<String, String> uploadFile;
     @ResponseBody
-    @GetMapping(value = "/getFtpFile/{filename}")
-    public void getFile(@PathVariable("filename") String filename,HttpServletResponse response) {
+    @RequestMapping(value = "/file/uploadFile", method = RequestMethod.POST)
+    public String uploadImg(HttpServletRequest request)throws Exception {
+        uploadFile = new HashMap<String, String>();
+        uploadFile = UploadUtil.uploadFile(request, "file");
+        return uploadFile.get("fileName");
+    }
+    @ResponseBody
+    @GetMapping(value = "/file/downloadFile/{filename:.+}")
+    public void getFile(@PathVariable("filename") String filename, HttpServletRequest request,HttpServletResponse response) {
         new HashMap<String, String>();
-         UploadUtil.getFileFromftp("vue_shiro_photo/userImg"+filename,response);
+         UploadUtil.downloadFile("file",filename,request,response);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/exam/uploadFile", method = RequestMethod.POST)
+    public String uploadExamFile(HttpServletRequest request)throws Exception {
+        uploadFile = new HashMap<String, String>();
+        uploadFile = UploadUtil.uploadFile(request, "exam/file");
+        return uploadFile.get("fileName");
+    }
 
-    @GetMapping(value = "/{filename}")
-    public String readImg(@PathVariable("filename") String filename,HttpServletRequest request,HttpServletResponse response) throws IOException {
-
-        ServletOutputStream out = null;
-        FileInputStream ips = null;
-        String url = "G:\\ftpserver\\vue_shiro_photo\\userImg\\"+filename+".jpg";
-        try {
-//获取图片存放路径 
-            File file = new File(url);
-            if(!file.exists()) {
-                return null;
-            }
-
-            ips = new FileInputStream(file);
-            response.setContentType("multipart/form-data");
-            out = response.getOutputStream();
-//读取文件流  
-            int len = 0;
-            byte[] buffer = new byte[1024 * 10];
-            while ((len = ips.read(buffer)) != -1){
-                out.write(buffer,0,len);
-            }
-            out.flush();
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            out.close();
-            ips.close();
-        }
+    @GetMapping(value = "/exam/{filename:.+}")
+    public String getExamFile(@PathVariable("filename") String filename,HttpServletRequest request,HttpServletResponse response) throws IOException {
+        UploadUtil.readFile( "exam/file",  filename,  response);
         return null;
     }
-
 
 }

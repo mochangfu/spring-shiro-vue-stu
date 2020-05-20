@@ -13,7 +13,7 @@ import java.util.List;
  * @Description: com.qxf.mapper
  */
 public interface CourseMapper extends BaseMapper<Course>{
-    List<Course> getListByPage(Page<Course> page,@Param("name") String name);
+    List<Course> getListByPage(Page<Course> page, @Param("name") String name);
 
     List<Course> getNotSelectedCourse(Page<Course> page, @Param("studentId") String studentId);
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @Description: com.qxf.service
  */
 public interface TeacherService extends IService<Teacher>{
-    List<Teacher> getListByPage(Page<Teacher> page,String name);
+    List<Teacher> getListByPage(Page<Teacher> page, String name);
     Object addTeacher(Teacher teacher);
     List<Teacher> findAllTeacher();
 }

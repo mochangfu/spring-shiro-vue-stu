@@ -12,7 +12,7 @@ import java.util.List;
  * @Description: com.qxf.service
  */
 public interface ClazzService extends IService<Clazz>{
-    List<Clazz> getListByPage(Page<Clazz> page,String name);
+    List<Clazz> getListByPage(Page<Clazz> page, String name);
     public Object addClazz(Clazz clazz);
 
     List<Clazz> getAllClazz(String majorId);

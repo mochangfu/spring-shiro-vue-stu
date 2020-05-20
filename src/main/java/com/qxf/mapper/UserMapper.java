@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface UserMapper extends BaseMapper<User>{
     //分页查询
-    List<User> findUserByPage(Pagination page,User user);
+    List<User> findUserByPage(Pagination page, User user);
 
     //登录验证
     List<User> checkUser(User user);

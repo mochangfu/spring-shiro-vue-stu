@@ -13,7 +13,7 @@ import java.util.List;
  * @Description: com.qxf.mapper
  */
 public interface InstituteMapper extends BaseMapper<Institute>{
-    List<Institute> getInstituteByPage(Page<Institute> page,@Param("name") String name);
+    List<Institute> getInstituteByPage(Page<Institute> page, @Param("name") String name);
 
     public List<Institute> findAllInstitute();
 }

@@ -17,7 +17,7 @@ public interface LoginLogMapper extends BaseMapper<LoginLog> {
     /**
      * 用户登录日志，searchKeyWord查询关键字，可以是用户名，可以是ip，模糊查询
      */
-    List<LoginLog> findUserLoginLogByPage(Pagination page,@Param("searchKeyWord") String searchKeyWord);
+    List<LoginLog> findUserLoginLogByPage(Pagination page, @Param("searchKeyWord") String searchKeyWord);
 
     /**
      * 查询用户登录总次数

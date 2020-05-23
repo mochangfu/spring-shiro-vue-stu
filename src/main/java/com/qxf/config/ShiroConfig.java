@@ -50,7 +50,8 @@ public class ShiroConfig {
         filterMap.put("/user/login", "anon");
         filterMap.put("/user/logout", "anon");
         filterMap.put("/user/uploadHander", "anon");
-     //   filterMap.put("/exam/uploadFile", "anon");
+      filterMap.put("/*/uploadFile", "anon");
+        filterMap.put("/*/downloadFile", "anon");
         // 需要认证才可以访问
         filterMap.put("/*", "authc");
         filterMap.put("/**", "authc");

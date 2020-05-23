@@ -17,7 +17,7 @@ import java.util.*;
  */
 public final class UploadUtil {
 
-    public static String downloadFile(String namespace, String fileName, HttpServletRequest request,HttpServletResponse response){
+    public static String downloadFile(String namespace, String fileName, String newName,HttpServletRequest request,HttpServletResponse response){
         if(namespace==null)namespace="file";
         String url = "G:\\ftpserver\\"+namespace+"\\"+fileName;
         File fileurl = new File(url);
@@ -41,10 +41,11 @@ public final class UploadUtil {
             }else{
                 finalFileName = URLEncoder.encode(fileName,"UTF8");//其他浏览器
             }
+            if(StringUtils.isEmpty(newName))newName=finalFileName;
             //设置HTTP响应头
             response.reset();//重置 响应头
             response.setContentType("application/x-download");//告知浏览器下载文件，而不是直接打开，浏览器默认为打开
-            response.addHeader("Content-Disposition" ,"attachment;filename=\"" +finalFileName+ "\"");//下载文件的名称
+            response.addHeader("Content-Disposition" ,"attachment;filename=\"" +newName+ "\"");//下载文件的名称
 
             // 循环取出流中的数据
             byte[] b = new byte[1024];
@@ -108,8 +109,12 @@ public final class UploadUtil {
                 if (multipartFile != null) {
                     String name = multipartFile.getOriginalFilename();
                     if (!"".equals(name)) {
+                        fileNames.put("name",name);
+                        String[] strArray = name.split("\\.");
+                        int suffixIndex = strArray.length -1;
+                        String endName = strArray[suffixIndex];
                         Calendar c=Calendar.getInstance();
-                        String fileName = c.get(Calendar.YEAR)+""+c.get(Calendar.MONDAY)+c.get(Calendar.DATE)+c.get(Calendar.MINUTE)+name+"_"+c.hashCode();
+                        String fileName = c.get(Calendar.YEAR)+""+c.get(Calendar.MONDAY)+c.get(Calendar.DATE)+c.get(Calendar.MINUTE)+"_"+c.hashCode()+"."+endName;
                         try {
                             String fileNme = saveLocal(multipartFile, namespace, fileName);
                             if (fileNme != null && !"".equals(fileNme)) {
@@ -172,7 +177,7 @@ public final class UploadUtil {
                         String[] strArray = name.split("\\.");
                         int suffixIndex = strArray.length -1;
                         name =strArray[suffixIndex];
-                        String fileName = d.getYear()+d.getMonth()+d.getDay()+d.getMinutes()+d.getSeconds()+"."+name.trim();
+                        String fileName = d.getYear()+""+d.getMonth()+d.getDay()+d.getMinutes()+d.getSeconds()+"."+name.trim();
                         try {
                             String fileNme = saveLocal(multipartFile, namespace, fileName);
                             if (fileNme != null && !"".equals(fileNme)) {

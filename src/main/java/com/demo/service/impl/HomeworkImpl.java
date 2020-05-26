@@ -45,7 +45,7 @@ public class HomeworkImpl extends ServiceImpl<HomeworkMapper, Homework>  {
     public Object add(Homework homework) {
 
         super.baseMapper.insertRecord(homework);
-        List<Student> students = studentsservice.getListByPage(null,null);
+        List<Student> students = studentsservice.getListByPage(new Page<>(1,100),null);
         students = students.stream().filter(s->homework.getClassId().equals(s.getClazzId())).collect(Collectors.toList());
         if(homework.getId()!=null){
             students.forEach(s->{

@@ -37,7 +37,7 @@ public class HomeworkAnswerController {
     @GetMapping("/list")
     public Object getListByPage(Integer startPage,Integer pageSize,String name,Integer id,String userId,Integer homeworkId){
         Page<HomeworkAnswer> page = new Page<>(startPage,pageSize);
-        List<HomeworkAnswer> list = homeworkAnswer.getListFileByPagee(page,id,name,userId,homeworkId);
+        List<HomeworkAnswer> list = homeworkAnswer.getListFileByPagee(page,id,null,userId,homeworkId);
         List<User> users = userService.findAllUser(new User());
         Map<String,String> idUserNameMap =new HashMap<>();
         users.forEach(u->{

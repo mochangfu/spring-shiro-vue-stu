@@ -8,7 +8,7 @@ import com.demo.utils.EnumCode;
 import com.demo.utils.ResultUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @Auther: qiuxinfa
@@ -23,7 +23,38 @@ public class HomeworkAnswerImpl extends ServiceImpl<HomeworkAnswerMapper, Homewo
     public List<HomeworkAnswer> getListFileByPagee(Page<HomeworkAnswer> page, Integer id,String name,String userId,Integer homeworkId) {
         return super.baseMapper.getListByPage(page,id,name,homeworkId,  userId);
     }
-
+    public List<ScoreStats> scoreStats(Integer homeworkId) {
+        Page<HomeworkAnswer> page = new Page<>(1,1000);
+        List<HomeworkAnswer>  list =super.baseMapper.getListByPage(page,null,null,homeworkId,  null);
+        Map<String,ScoreStats> map = new HashMap();
+        list.forEach(l->{
+            if(l.getScore()==null){
+                if(map.get("未交")==null)map.put("未交",new ScoreStats("未交",0,0.0,6));
+                map.get("未交").addCount(1);
+            }else if(l.getScore()<60){
+                if(map.get("低于60")==null)map.put("低于60",new ScoreStats("低于60",0,0.0,5));
+                map.get("低于60").addCount(1);
+            }else if(l.getScore()==null){
+                if(map.get("60-69")==null)map.put("60-69",new ScoreStats("60-69",0,0.0,4));
+                map.get("60-69").addCount(1);
+            }else if(l.getScore()==null){
+                if(map.get("70-79")==null)map.put("70-79",new ScoreStats("70-79",0,0.0,3));
+                map.get("70-79").addCount(1);
+            }else if(l.getScore()==null){
+                if(map.get("80-89")==null)map.put("80-89",new ScoreStats("80-89",0,0.0,2));
+                map.get("80-89").addCount(1);
+            } else if(l.getScore()==null){
+                if(map.get("90-100")==null)map.put("90-100",new ScoreStats("90-100",0,0.0,1));
+                map.get("90-100").addCount(1);
+            }
+        });
+        map.forEach((k,v)->{
+            v.setPercent(v.getCount()/list.size()*1.0);
+        });
+        List<ScoreStats> scoreStats =new ArrayList<>(map.values());
+        scoreStats.sort(Comparator.comparing(ScoreStats::getScoreInt));
+        return scoreStats;
+    }
 
     public Object delete(Integer[] ids) {
         //逐个删除
@@ -41,5 +72,56 @@ public class HomeworkAnswerImpl extends ServiceImpl<HomeworkAnswerMapper, Homewo
     public Object edit(HomeworkAnswer Homework) {
         super.baseMapper.updateById(Homework);
         return ResultUtil.result(EnumCode.OK.getValue(),"新增成功");
+    }
+    class ScoreStats{
+        private String score;
+
+        private  Integer count;
+        private Double percent;
+        private Integer scoreInt;
+        public String getScore() {
+            return score;
+        }
+
+        public void setScore(String score) {
+            this.score = score;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public void setCount(Integer count) {
+            this.count = count;
+        }
+        public void addCount(Integer i) {
+            count = count+i;
+        }
+        public Double getPercent() {
+            return percent;
+        }
+        public String getPercentStr() {
+            if(percent==null)return null;
+            return( percent*10000/1)/100.0+"%";
+        }
+
+        public void setPercent(Double percent) {
+            this.percent = percent;
+        }
+
+        public Integer getScoreInt() {
+            return scoreInt;
+        }
+
+        public void setScoreInt(Integer scoreInt) {
+            this.scoreInt = scoreInt;
+        }
+
+        public ScoreStats(String score, Integer count, Double percent, Integer scoreInt) {
+            this.score = score;
+            this.count = count;
+            this.percent = percent;
+            this.scoreInt = scoreInt;
+        }
     }
 }

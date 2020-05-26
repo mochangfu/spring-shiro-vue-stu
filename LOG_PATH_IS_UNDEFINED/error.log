@@ -287,3 +287,6 @@ java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check th
 2020-05-23 20:44:40.606 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
 2020-05-23 20:58:21.059 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
 2020-05-23 21:07:54.690 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
+2020-05-27 02:11:57.138 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
+2020-05-27 02:48:46.046 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
+2020-05-27 03:12:08.841 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set

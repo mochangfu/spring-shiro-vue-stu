@@ -82,9 +82,9 @@ public class HomeworkController {
 
     @GetMapping("/score/stats")
     public Object stats(String  clazzId,Integer  homeworkId){
-        homeworkAnswer.getListFileByPagee()
 
-        return null;
+        List list =homeworkAnswer.scoreStats(homeworkId);
+        return ResultUtil.result(EnumCode.OK.getValue(),"请求成功",list,1);
     }
 
 }

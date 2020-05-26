@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.HomeworkMapper">
+
+	<!--查询列表-->
+	<select id="getListByPage"  resultType="com.demo.pojo.Homework">
+		SELECT *
+		FROM
+			 homework
+		WHERE 1=1
+
+		<if test="name!=null">
+			and id like CONCAT('%',#{name},'%')
+		</if>
+
+		<if test="model!=null">
+			and model=#{model}
+		</if>
+		<if test="majorId!=null">
+			and majorId=#{majorId}
+		</if>
+		<if test="classId!=null">
+		and classId=#{classId}
+	</if>
+		<if test="userId!=null">
+			and userId=#{userId}
+		</if>
+ order by postTime
+	</select>
+
+	<update id="insertRecord" parameterType="com.demo.pojo.Homework"  >
+		insert into homework (name,descrip,fileId,majorId,classId,postTime,userId )
+		VALUES (#{name},#{descrip},#{fileId},#{majorId},#{classId},#{postTime},#{userId})
+	</update>
+</mapper>

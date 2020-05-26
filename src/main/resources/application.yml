@@ -25,5 +25,5 @@ spring:
 
 #mybatis 配置
 mybatis:
-  mapper-locations: classpath:com/qxf/mapper/xml/*.xml
-  type-aliases-package: com.qxf.pojo
+  mapper-locations: classpath:com/demo/mapper/xml/*.xml
+  type-aliases-package: com.demo.pojo

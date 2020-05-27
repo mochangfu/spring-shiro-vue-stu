@@ -26,9 +26,9 @@
  order by postTime
 	</select>
 
-	<update id="insertRecord" parameterType="com.demo.pojo.HomeworkAnswer"  >
+	<insert id="insertRecord" parameterType="com.demo.pojo.HomeworkAnswer"  >
 
 		insert into homeworkAnswer(homeworkId,fileId,postTime,userId,score )
 		VALUES (#{homeworkId},#{fileId},#{postTime},#{userId},#{score})
-	</update>
+	</insert>
 </mapper>

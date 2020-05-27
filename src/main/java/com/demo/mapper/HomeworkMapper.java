@@ -15,5 +15,5 @@ import java.util.List;
 public interface HomeworkMapper extends BaseMapper<Homework>{
     List<Homework> getListByPage(Page<Homework> page, @Param("id") Integer id, @Param("name") String name, @Param("model") String model,
                                  @Param("majorId") String majorId, @Param("classId") String classId,@Param("userId") String userId);
-   public void insertRecord(Homework fileRecord);
+   public void insertRecord(Homework homework);
 }

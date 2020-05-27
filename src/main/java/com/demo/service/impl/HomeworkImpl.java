@@ -10,6 +10,7 @@ import com.demo.utils.EnumCode;
 import com.demo.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class HomeworkImpl extends ServiceImpl<HomeworkMapper, Homework>  {
         return ResultUtil.result(EnumCode.OK.getValue(), "删除成功");
     }
 
-
+    @Transactional
     public Object add(Homework homework) {
 
         super.baseMapper.insertRecord(homework);
@@ -48,7 +49,7 @@ public class HomeworkImpl extends ServiceImpl<HomeworkMapper, Homework>  {
         students = students.stream().filter(s->homework.getClassId().equals(s.getClazzId())).collect(Collectors.toList());
         if(homework.getId()!=null){
             students.forEach(s->{
-                HomeworkAnswer answer =new HomeworkAnswer(null,homework.getId(),null,null,s.getId(),null,null,s.getName());
+                HomeworkAnswer answer =new HomeworkAnswer(null,homework.getId(),null,null,s.getId(),null,null,s.getName(),null,null,null,0);
                 homeworkAnswer.add(answer);
             });
 

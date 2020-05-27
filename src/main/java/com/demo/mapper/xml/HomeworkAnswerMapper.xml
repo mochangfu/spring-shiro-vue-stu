@@ -4,9 +4,12 @@
 
 	<!--查询列表-->
 	<select id="getListByPage"  resultType="com.demo.pojo.HomeworkAnswer">
-		SELECT *
+		SELECT h.*,hw.name as homeworkName,f.name as file,hw.descrip,f.file_name fileName,u.username userName
 		FROM
-		homeworkAnswer
+		homeworkAnswer  h
+		left  join homework hw on h.homeworkId=hw.id
+		left join t_file_record f on h.fileId=f.id
+		left join t_user u on h.userId=u.id
 		WHERE 1=1
 
 		<if test="id!=null">
@@ -26,9 +29,14 @@
  order by postTime
 	</select>
 
-	<insert id="insertRecord" parameterType="com.demo.pojo.HomeworkAnswer"  >
+	<update id="insertRecord" parameterType="com.demo.pojo.HomeworkAnswer"  >
 
-		insert into homeworkAnswer(homeworkId,fileId,postTime,userId,score )
-		VALUES (#{homeworkId},#{fileId},#{postTime},#{userId},#{score})
-	</insert>
+		insert into homeworkAnswer(homeworkId,fileId,postTime,userId,score,status )
+		VALUES (#{homeworkId},#{fileId},#{postTime},#{userId},#{score},#{status})
+	</update>
+
+
+	<update id="update" parameterType="com.demo.pojo.HomeworkAnswer">
+		UPDATE homeworkAnswer set score=#{score} WHERE fileId=#{fileId}
+	</update>
 </mapper>

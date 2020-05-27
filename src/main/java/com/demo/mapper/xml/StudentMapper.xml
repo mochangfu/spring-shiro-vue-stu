@@ -14,7 +14,10 @@
 		t.student_number AS studentNumber,
 		t1.name AS clazzName,
 		t2.name AS majorName,
-		t3.name AS instituteName
+		t3.name AS instituteName,
+		t.clazz_id AS clazzId,
+		t.major_id AS majorId,
+		t.institute_id AS instituteId
 		FROM
 		t_student t
 		LEFT JOIN t_clazz t1 ON  t1.id = t.clazz_id

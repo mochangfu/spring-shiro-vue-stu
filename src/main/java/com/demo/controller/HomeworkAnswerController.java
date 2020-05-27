@@ -66,7 +66,7 @@ public class HomeworkAnswerController {
 
 
         Date d =new Date();
-        HomeworkAnswer homeworkAnswer = new HomeworkAnswer(null,homeworkId,fileId,null,userId,null,null,null);
+        HomeworkAnswer homeworkAnswer = new HomeworkAnswer(null,homeworkId,fileId,null,userId,null,null,null,null,null,null,0);
 
         this.homeworkAnswer.add(homeworkAnswer);
         return ResultUtil.result(EnumCode.OK.getValue(),"请求成功",homeworkAnswer,null);

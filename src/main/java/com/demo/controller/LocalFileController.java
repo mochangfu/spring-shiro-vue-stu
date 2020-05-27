@@ -6,6 +6,7 @@ import com.demo.service.FileRecordService;
 import com.demo.utils.EnumCode;
 import com.demo.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,7 @@ public class LocalFileController extends BaseController {
     @GetMapping(value = "/file/downloadFile/{filename:.+}")
     public void downloadFile(@PathVariable("filename") String filename, HttpServletRequest request,HttpServletResponse response) {
         new HashMap<String, String>();
+        if(StringUtils.isEmpty(filename))return;
         List<FileRecord>  fileRecords =fileRecordService.getListFileByPagee(null,null,null,null,null,null,null);
         fileRecords =fileRecords.stream().filter(f->filename.equals(f.getFileName())).collect(Collectors.toList());
         String downloadName= null;

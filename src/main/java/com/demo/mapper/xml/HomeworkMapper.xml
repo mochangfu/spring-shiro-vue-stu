@@ -28,8 +28,8 @@
  order by postTime
 	</select>
 
-	<insert id="insertRecord"   parameterType="com.demo.pojo.Homework"  >
+	<update id="insertRecord" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.demo.pojo.Homework"  >
 		insert into homework (name,descrip,fileId,majorId,classId,postTime,userId )
 		VALUES (#{name},#{descrip},#{fileId},#{majorId},#{classId},#{postTime},#{userId})
-	</insert>
+	</update>
 </mapper>

@@ -10,7 +10,6 @@
  */
 package com.demo.pojo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +17,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
+
 @NoArgsConstructor
 public class HomeworkAnswer implements Serializable {
 
@@ -33,5 +32,24 @@ public class HomeworkAnswer implements Serializable {
     private Integer[] ids;          //批量删除的id
     private String userName;
 
+    private String fileName;
+    private String homeworkName;
+    private String descrip;
+    private String file;
+    private Integer status;
+    public HomeworkAnswer(Integer id, Integer homeworkId, Integer fileId, Date postTime, String userId, Double score, Integer[] ids, String userName, String fileName, String homeworkName, String descrip, Integer status) {
+        this.id = id;
+        this.homeworkId = homeworkId;
+        this.fileId = fileId;
+        this.postTime = postTime;
+        this.userId = userId;
+        this.score = score;
+        this.ids = ids;
+        this.userName = userName;
+        this.fileName = fileName;
+        this.homeworkName = homeworkName;
+        this.descrip = descrip;
+        this.status = status;
+    }
 
 }

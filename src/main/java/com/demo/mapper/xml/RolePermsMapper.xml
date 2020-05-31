@@ -44,7 +44,7 @@
             <if test="null != roleId">
                 AND rp.role_id = #{roleId}
             </if>
-            GROUP BY p.sort
+
         </if>
         <if test="null != parentId">
             SELECT
@@ -57,7 +57,7 @@
             <if test="null != roleId ">
                 AND rp.role_id = #{roleId}
             </if>
-            GROUP BY p.sort
+
         </if>
     </select>
 

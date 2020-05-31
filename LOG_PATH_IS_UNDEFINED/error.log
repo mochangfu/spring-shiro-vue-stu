@@ -386,3 +386,5 @@ java.sql.SQLIntegrityConstraintViolationException: Column 'userId' in where clau
 2020-06-01 01:31:22.492 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
 2020-06-01 01:37:42.541 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
 2020-06-01 01:42:32.749 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
+2020-06-01 02:11:14.517 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set
+2020-06-01 02:40:46.105 [restartedMain] ERROR c.alibaba.druid.pool.DruidDataSource -testWhileIdle is true, validationQuery not set

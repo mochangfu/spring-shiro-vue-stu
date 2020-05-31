@@ -43,9 +43,6 @@
 			and h.id=#{id}
 		</if>
 
-		<if test="name!=null">
-			and h.name like CONCAT('%',#{name},'%')
-		</if>
 
 		<if test="homeworkId!=null">
 			and h.homeworkId=#{homeworkId}

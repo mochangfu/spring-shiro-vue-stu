@@ -16,4 +16,6 @@ public interface HomeworkAnswerMapper extends BaseMapper<HomeworkAnswer>{
     List<HomeworkAnswer> getListByPage(Page<HomeworkAnswer> page, @Param("id") Integer id, @Param("name") String name, @Param("homeworkId") Integer homeworkId,
                                  @Param("userId") String userId);
    public void insertRecord(HomeworkAnswer fileRecord);
+   public  void update(HomeworkAnswer fileRecord);
+
 }

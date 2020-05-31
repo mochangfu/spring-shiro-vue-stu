@@ -30,7 +30,7 @@
  order by upload_time
 	</select>
 
-	<update id="insertFileRecord" parameterType="com.demo.pojo.FileRecord"  >
+	<update id="insertFileRecord"  useGeneratedKeys="true" keyProperty="id" keyColumn="id"  parameterType="com.demo.pojo.FileRecord"  >
 		insert into t_file_record (name,file_name,upload_time,upload_user_id,descrip,model ,institute_id  , major_id ,class_id )
 		VALUES (#{name},#{fileName},#{uploadTime},#{uploadUserId},#{descrip},#{model},#{instituteId},#{majorId},#{classId})
 	</update>

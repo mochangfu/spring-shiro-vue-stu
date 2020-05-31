@@ -24,7 +24,7 @@ public class HomeworkAnswer implements Serializable {
     private Integer id;
 
     private Integer homeworkId;//作业id
-    private Integer fileId;//文件保存名
+    private Integer fileId;//文件
     private Date postTime;//提交时间
 
     private String userId;          //批量删除的id
@@ -32,10 +32,10 @@ public class HomeworkAnswer implements Serializable {
     private Integer[] ids;          //批量删除的id
     private String userName;
 
-    private String fileName;
+    private String fileName;//保存名
     private String homeworkName;
     private String descrip;
-    private String file;
+    private String file;//原名
     private Integer status;
     public HomeworkAnswer(Integer id, Integer homeworkId, Integer fileId, Date postTime, String userId, Double score, Integer[] ids, String userName, String fileName, String homeworkName, String descrip, Integer status) {
         this.id = id;

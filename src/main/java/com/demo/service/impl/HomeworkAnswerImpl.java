@@ -70,7 +70,7 @@ public class HomeworkAnswerImpl extends ServiceImpl<HomeworkAnswerMapper, Homewo
     }
 
     public Object edit(HomeworkAnswer Homework) {
-        super.baseMapper.updateById(Homework);
+        super.baseMapper.update(Homework);
         return ResultUtil.result(EnumCode.OK.getValue(),"新增成功");
     }
     class ScoreStats{

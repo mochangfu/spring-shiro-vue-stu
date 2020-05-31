@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.demo.ftp.UploadUtil;
 import com.demo.pojo.FileRecord;
 import com.demo.service.FileRecordService;
@@ -49,23 +50,38 @@ public class LocalFileController extends BaseController {
     @GetMapping(value = "/file/downloadFile/{filename:.+}")
     public void downloadFile(@PathVariable("filename") String filename, HttpServletRequest request,HttpServletResponse response) {
         new HashMap<String, String>();
-        if(StringUtils.isEmpty(filename))return;
-        List<FileRecord>  fileRecords =fileRecordService.getListFileByPagee(null,null,null,null,null,null,null);
+        if(StringUtils.isEmpty(filename)||"undefined".equals(filename))return;
+        Page page = new Page<>(1,1000);
+        List<FileRecord>  fileRecords =fileRecordService.getListFileByPagee(page,null,null,null,null,null,null);
         fileRecords =fileRecords.stream().filter(f->filename.equals(f.getFileName())).collect(Collectors.toList());
         String downloadName= null;
-        if(fileRecords.size()>0)downloadName=fileRecords.get(0).getName();
+        if(fileRecords.size()==1)downloadName=fileRecords.get(0).getName();
          UploadUtil.downloadFile("file",filename,downloadName,request,response);
+    }
+    @ResponseBody
+    @GetMapping(value = "/file/download")
+    public void downloa(@RequestParam("fileName") String filename, HttpServletRequest request,HttpServletResponse response) {
+        new HashMap<String, String>();
+        if(StringUtils.isEmpty(filename)||"undefined".equals(filename))return;
+        Page page = new Page<>(1,1000);
+        List<FileRecord>  fileRecords =fileRecordService.getListFileByPagee(page,null,null,null,null,null,null);
+        fileRecords =fileRecords.stream().filter(f->filename.equals(f.getFileName())).collect(Collectors.toList());
+        String downloadName= null;
+        if(fileRecords.size()==1)downloadName=fileRecords.get(0).getName();
+        UploadUtil.downloadFile("file",filename,downloadName,request,response);
     }
     @ResponseBody
     @GetMapping(value = "/exam/downloadFile")
     public void downExamloadFile(@RequestParam("fileName") String fileName, HttpServletRequest request,HttpServletResponse response) {
         new HashMap<String, String>();
-        List<FileRecord>  fileRecords =fileRecordService.getListFileByPagee(null,null,null,null,null,null,null);
+        Page page = new Page<>(1,1000);
+        List<FileRecord>  fileRecords =fileRecordService.getListFileByPagee(page,null,null,null,null,null,null);
         fileRecords =fileRecords.stream().filter(f->fileName.equals(f.getFileName())).collect(Collectors.toList());
         String downloadName= null;
         if(fileRecords.size()>0)downloadName=fileRecords.get(0).getName();
         UploadUtil.downloadFile("exam/file",fileName,downloadName,request,response);
     }
+
     @ResponseBody
     @RequestMapping(value = "/exam/uploadFile", method = RequestMethod.POST)
     public String uploadExamFile(HttpServletRequest request,  @RequestParam(required = false ,value = "userId" ) String userId,

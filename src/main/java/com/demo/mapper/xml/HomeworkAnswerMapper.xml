@@ -4,7 +4,7 @@
 
 	<!--查询列表-->
 	<select id="getListByPage"  resultType="com.demo.pojo.HomeworkAnswer">
-		SELECT h.*,hw.name as homeworkName,f.name as file,hw.descrip,f.file_name fileName,u.username userName
+		SELECT h.*,hw.name as homeworkName,hw.descrip,f.name as file,f.id  fileId,f.file_name fileName,u.username userName
 		FROM
 		homeworkAnswer  h
 		left  join homework hw on h.homeworkId=hw.id
@@ -13,20 +13,47 @@
 		WHERE 1=1
 
 		<if test="id!=null">
-			and id=#{id}
+			and h.id=#{id}
 		</if>
 
 		<if test="name!=null">
-			and id like CONCAT('%',#{name},'%')
+			and h.name like CONCAT('%',#{name},'%')
 		</if>
 
 		<if test="homeworkId!=null">
-			and homeworkId=#{homeworkId}
+			and h.homeworkId=#{homeworkId}
 		</if>
 		<if test="userId!=null">
-			and userId=#{userId}
+			and h.userId=#{userId}
 		</if>
  order by postTime
+	</select>
+
+	<!--查询列表-->
+	<select id="getListByPaget"  resultType="com.demo.pojo.HomeworkAnswer">
+		SELECT h.*,hw.name as homeworkName,hw.descrip,f.name as file,f.id  fileId,f.file_name fileName,u.username userName
+		FROM
+		homeworkAnswer  h
+		left  join homework hw on h.homeworkId=hw.id
+		left join t_file_record f on h.fileId=f.id
+		left join t_user u on h.userId=u.id
+		WHERE 1=1
+
+		<if test="id!=null">
+			and h.id=#{id}
+		</if>
+
+		<if test="name!=null">
+			and h.name like CONCAT('%',#{name},'%')
+		</if>
+
+		<if test="homeworkId!=null">
+			and h.homeworkId=#{homeworkId}
+		</if>
+		<if test="userId!=null">
+			and hw.userId=#{userId}
+		</if>
+		order by postTime
 	</select>
 
 	<update id="insertRecord" parameterType="com.demo.pojo.HomeworkAnswer"  >
@@ -37,6 +64,6 @@
 
 
 	<update id="update" parameterType="com.demo.pojo.HomeworkAnswer">
-		UPDATE homeworkAnswer set score=#{score} WHERE fileId=#{fileId}
+		UPDATE homeworkAnswer set score=#{score} ,fileId=#{fileId} WHERE id=#{id}
 	</update>
 </mapper>

@@ -1,7 +1,6 @@
 package com.demo.aspect;
 
 import com.demo.controller.BaseController;
-import com.demo.exception.MyException;
 import com.demo.pojo.OperateRecord;
 import com.demo.service.OperateRecordService;
 import com.demo.service.PermsService;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -118,22 +116,7 @@ public class HttpAspect extends BaseController {
         //下面根据请求的url，进行权限验证
         Integer count = permissionService.findCountByUrl(requestUrl);
           //如果请求的url存在数据库中，说明是有权限的，否则不需要权限
-        if (count != 0){
-            String roleId = super.getRoleId();
-            if (StringUtils.isEmpty(roleId)) {
-                or.setIsSuccess(0);
-                operatingRecordService.insert(or);
-                throw new MyException(ResultUtil.result(EnumCode.FORBIDDEN.getValue(), EnumCode.FORBIDDEN.getText()));
-            }
 
-            Integer row = rolePermissionService.findCountByRole(roleId, request.getRequestURI().replaceAll(request.getContextPath(),""));
-            //如果当前角色没有权限，并且不是管理员，角色"1"为管理员，这里可以根据情况调整，因为管理员也不是拥有所有权限
-            if (row == 0 && ! "1".equals(super.getRoleId())) {
-                or.setIsSuccess(0);
-                operatingRecordService.insert(or);
-                throw new MyException(ResultUtil.result(EnumCode.FORBIDDEN.getValue(), EnumCode.FORBIDDEN.getText()));
-            }
-        }
         or.setIsSuccess(1);
         operatingRecordService.insert(or);
     }

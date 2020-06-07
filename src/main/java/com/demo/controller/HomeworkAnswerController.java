@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Auther: qiuxinfa
@@ -41,6 +42,9 @@ public class HomeworkAnswerController {
     private StudentServiceImpl studentsservice;
     @GetMapping("/list")
     public Object getListByPage(Integer startPage,Integer pageSize,String name,Integer id,String userId,Integer homeworkId){
+        startPage =startPage==null?0:startPage;
+        pageSize =pageSize==null?30:pageSize;
+        if(userId==null)userId=BaseController.getUserId();
         Page<HomeworkAnswer> page = new Page<>(startPage,pageSize);
         List<HomeworkAnswer> list = homeworkAnswer.getListFileByPagee(page,id,null,userId,homeworkId);
         List<User> users = userService.findAllUser(new User());
@@ -48,7 +52,25 @@ public class HomeworkAnswerController {
         users.forEach(u->{
             idUserNameMap.put(u.getId(),u.getUsername());
         });
-
+        if(name!=null&&name.length()>1)  list = list.stream().filter(l->l.getHomeworkName()==null||l.getHomeworkName().contains(name)).collect(Collectors.toList());
+        for (HomeworkAnswer homeworkAnswer : list) {
+            homeworkAnswer.setUserName(idUserNameMap.get(homeworkAnswer.getUserId()));
+        }
+        return ResultUtil.result(EnumCode.OK.getValue(),"请求成功",list,page.getTotal());
+    }
+    @GetMapping("/mylist")
+    public Object getmylistByPage(Integer startPage,Integer pageSize,String name,Integer id,String userId,Integer homeworkId){
+        startPage =startPage==null?0:startPage;
+        pageSize =pageSize==null?30:pageSize;
+        Page<HomeworkAnswer> page = new Page<>(startPage,pageSize);
+        if(userId==null)userId=BaseController.getUserId();
+        List<HomeworkAnswer> list = homeworkAnswer.getListFileByPagee(page,id,null,userId,homeworkId);
+        List<User> users = userService.findAllUser(new User());
+        Map<String,String> idUserNameMap =new HashMap<>();
+        users.forEach(u->{
+            idUserNameMap.put(u.getId(),u.getUsername());
+        });
+        if(name!=null&&name.length()>1)  list = list.stream().filter(l->l.getHomeworkName()==null||l.getHomeworkName().contains(name)).collect(Collectors.toList());
         for (HomeworkAnswer homeworkAnswer : list) {
             homeworkAnswer.setUserName(idUserNameMap.get(homeworkAnswer.getUserId()));
         }
@@ -118,6 +140,13 @@ public class HomeworkAnswerController {
        // HomeworkAnswer myAnswer = homeworkAnswer.getListFileByPagee(null,id,null,userId,id).get(0);
         edit( id, fileRecord.getId(),  null, null, null);
         return ResultUtil.result(EnumCode.OK.getValue(),"新增成功",fileRecord);
+    }
+
+    @GetMapping("/score/stats")
+    public Object stats(String  clazzId,Integer  homeworkId){
+
+        List list =homeworkAnswer.scoreStats(homeworkId);
+        return ResultUtil.result(EnumCode.OK.getValue(),"请求成功",list,1);
     }
 
 

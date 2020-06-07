@@ -42,6 +42,9 @@ public class HomeworkController {
     private StudentServiceImpl studentsservice;
     @GetMapping("/list")
     public Object getListByPage(Integer startPage,Integer pageSize,String name,Integer id,String userId,String model,String major,String clazz){
+        if(userId==null)userId=BaseController.getUserId();
+        startPage =startPage==null?0:startPage;
+        pageSize =pageSize==null?30:pageSize;
         Page<Homework> page = new Page<>(startPage,pageSize);
         List<Homework> list = homeworkServie.getListFileByPagee(page,id,name,userId,model, major, clazz);
         List<User> users = userService.findAllUser(new User());
@@ -49,7 +52,7 @@ public class HomeworkController {
         users.forEach(u->{
             idUserNameMap.put(u.getId(),u.getUsername());
         });
-        list = list.stream().filter(l->l.getName()==null||l.getName().contains(name)).collect(Collectors.toList());
+      if(name!=null&&name.length()>1)  list = list.stream().filter(l->l.getName()==null||l.getName().contains(name)).collect(Collectors.toList());
         for (Homework Homework : list) {
             Homework.setUserName(idUserNameMap.get(Homework.getUserId()));
         }
@@ -79,12 +82,5 @@ public class HomeworkController {
       return null;
     }
 
-
-    @GetMapping("/score/stats")
-    public Object stats(String  clazzId,Integer  homeworkId){
-
-        List list =homeworkAnswer.scoreStats(homeworkId);
-        return ResultUtil.result(EnumCode.OK.getValue(),"请求成功",list,1);
-    }
 
 }

@@ -43,7 +43,7 @@ public class BaseController {
      * 获取用户名id
      * @return
      */
-    protected String getUserId() {
+    static  public String getUserId() {
 
         Subject subject = SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal();

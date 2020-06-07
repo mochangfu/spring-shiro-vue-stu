@@ -43,7 +43,7 @@ public class ScoreStats {
 
     public String getPercentStr() {
         if (percent == null) return null;
-        return (percent * 10000 / 1) / 100.0 + "%";
+        return (percent * 100 / 1) / 100.0 + "%";
     }
 
     public void setPercent(Double percent) {

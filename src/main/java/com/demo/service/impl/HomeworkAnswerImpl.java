@@ -49,7 +49,7 @@ public class HomeworkAnswerImpl extends ServiceImpl<HomeworkAnswerMapper, Homewo
             }
         });
         map.forEach((k,v)->{
-            v.setPercent(v.getCount()/list.size()*1.0);
+            v.setPercent(v.getCount()*100/list.size()*1.0);
         });
         List<ScoreStats> scoreStats =new ArrayList<>(map.values());
         scoreStats.sort(Comparator.comparing(ScoreStats::getScoreInt));

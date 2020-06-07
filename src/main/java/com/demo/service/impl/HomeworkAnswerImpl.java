@@ -34,16 +34,16 @@ public class HomeworkAnswerImpl extends ServiceImpl<HomeworkAnswerMapper, Homewo
             }else if(l.getScore()<60){
                 if(map.get("低于60")==null)map.put("低于60",new ScoreStats("低于60",0,0.0,5));
                 map.get("低于60").addCount(1);
-            }else if(l.getScore()==null){
+            }else if(l.getScore()>=60&&l.getScore()<70){
                 if(map.get("60-69")==null)map.put("60-69",new ScoreStats("60-69",0,0.0,4));
                 map.get("60-69").addCount(1);
-            }else if(l.getScore()==null){
+            }else if(l.getScore()>=60&&l.getScore()<80){
                 if(map.get("70-79")==null)map.put("70-79",new ScoreStats("70-79",0,0.0,3));
                 map.get("70-79").addCount(1);
-            }else if(l.getScore()==null){
+            }else if(l.getScore()>=80&&l.getScore()<90){
                 if(map.get("80-89")==null)map.put("80-89",new ScoreStats("80-89",0,0.0,2));
                 map.get("80-89").addCount(1);
-            } else if(l.getScore()==null){
+            } else if(l.getScore()>=90&&l.getScore()<100){
                 if(map.get("90-100")==null)map.put("90-100",new ScoreStats("90-100",0,0.0,1));
                 map.get("90-100").addCount(1);
             }
@@ -73,55 +73,6 @@ public class HomeworkAnswerImpl extends ServiceImpl<HomeworkAnswerMapper, Homewo
         super.baseMapper.update(Homework);
         return ResultUtil.result(EnumCode.OK.getValue(),"新增成功");
     }
-    class ScoreStats{
-        private String score;
 
-        private  Integer count;
-        private Double percent;
-        private Integer scoreInt;
-        public String getScore() {
-            return score;
-        }
 
-        public void setScore(String score) {
-            this.score = score;
-        }
-
-        public Integer getCount() {
-            return count;
-        }
-
-        public void setCount(Integer count) {
-            this.count = count;
-        }
-        public void addCount(Integer i) {
-            count = count+i;
-        }
-        public Double getPercent() {
-            return percent;
-        }
-        public String getPercentStr() {
-            if(percent==null)return null;
-            return( percent*10000/1)/100.0+"%";
-        }
-
-        public void setPercent(Double percent) {
-            this.percent = percent;
-        }
-
-        public Integer getScoreInt() {
-            return scoreInt;
-        }
-
-        public void setScoreInt(Integer scoreInt) {
-            this.scoreInt = scoreInt;
-        }
-
-        public ScoreStats(String score, Integer count, Double percent, Integer scoreInt) {
-            this.score = score;
-            this.count = count;
-            this.percent = percent;
-            this.scoreInt = scoreInt;
-        }
-    }
 }

@@ -143,10 +143,14 @@ public class HomeworkAnswerController {
     }
 
     @GetMapping("/score/stats")
-    public Object stats(String  clazzId,Integer  homeworkId){
+    public Object stats(Integer startPage,Integer pageSize,String  clazzId,Integer  homeworkId){
+        startPage =startPage==null?0:startPage;
+        pageSize =pageSize==null?10:pageSize;
+        Page<HomeworkAnswer> page = new Page<>(startPage,pageSize);
 
         List list =homeworkAnswer.scoreStats(homeworkId);
-        return ResultUtil.result(EnumCode.OK.getValue(),"请求成功",list,1);
+        page.setTotal(list.size());
+        return ResultUtil.result(EnumCode.OK.getValue(),"请求成功",list,list.size());
     }
 
 
